@@ -9,6 +9,6 @@ entries:
     name: hemls
     type: application
     urls:
-    - https://github.com/Krasivaya/helms/helms-0.1.0.tgz
+    - https://raw.githubusercontent.com/Krasivaya/helms/main/helms-0.1.0.tgz
     version: 0.1.0
 generated: "2024-11-15T17:14:38.126938+02:00"
