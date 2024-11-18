@@ -1,0 +1,38 @@
+appName: webapp
+namespace: default
+protocol: TCP
+port: 3000
+db:
+  name: mongo
+  label: mongodb
+  port: 8080
+  targetPort: 27017
+  image:
+    tag: 5.0
+  env:
+    initName: MONGO_INITDB_ROOT_USERNAME
+    initPwd: MONGO_INITDB_ROOT_PASSWORD
+  volume:
+    name: mongo-storage
+    pv: mongo-pv
+    pvc: mongo-pvc
+    storage: 1Gi
+    path: /data/db
+    hostPath: /mnt/data
+    accessMode: ReadWriteOnce
+    policy: Retain
+env:
+  userName: USER_NAME
+  userPwd: USER_PWD
+  dbUrl: DB_URL
+configmap:
+  name: mongo-config
+  userName: USER_NAME
+  userPwd: USER_PWD
+  dbUrl: DB_URL
+  data:
+    mongoURL: mongo-service:8080
+image:
+  name: k8s-demo-app
+  tag: v1.0
+  

@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.db.name }}
+  labels:
+    app: {{ .Values.db.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.db.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.db.name }}
+    spec:
+      containers:
+      - name: {{ .Values.db.label }}
+        image: "{{ .Values.db.name }}:{{ .Values.db.image.tag }}"
+        ports:
+        - containerPort: 27017
+        env:
+        - name: {{ .Values.db.env.initName }}
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-user
+        - name: {{ .Values.db.env.initPwd }}
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-password
+        volumeMounts:
+        - name: {{ .Values.db.volume.name }}
+          mountPath: {{ .Values.db.volume.path }}
+      volumes:
+      - name: {{ .Values.db.volume.name }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.db.volume.pvc }}
+---
+# Persistent Volume
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.db.volume.pv }}
+spec:
+  capacity:
+    storage: {{ .Values.db.volume.storage }}
+  accessModes:
+    - {{ .Values.db.volume.accessMode }}
+  persistentVolumeReclaimPolicy: {{ .Values.db.volume.Retain }}
+  hostPath:
+    path: "{{ .Values.db.volume.hostPath }}"
+
+---
+# Persistent Volume Claim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.db.volume.pvc }}
+spec:
+  accessModes:
+    - {{ .Values.db.volume.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.db.volume.storage }}
+
+---
+# Mongo Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.db.name }}
+spec:
+  selector:
+    app: {{ .Values.db.name }}
+  ports:
+    - protocol: {{ .Values.protocol }}
+      port: {{ .Values.db.port }}
+      targetPort: {{ .Values.db.targetPort }}
