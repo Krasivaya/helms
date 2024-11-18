@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  hemls:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2024-11-15T17:14:38.128063+02:00"
+    description: A Helm chart for Kubernetes
+    digest: ec67b20b47023cdf7c7394bebf5be22f970b121437947b6aa4ef6014ead630d1
+    name: hemls
+    type: application
+    urls:
+    - https://github.com/Krasivaya/helms/helms-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-11-15T17:14:38.126938+02:00"
